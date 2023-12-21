@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -O3 -Wall -Werror -Wno-unused-variable
-LDFLAGS = -lSDL2
+LDFLAGS = -lSDL2 -lSDL2_ttf
 
 SRC := $(wildcard src/*.cpp) $(wildcard src/**/*.cpp) $(wildcard src/**/**/*.cpp)
 OBJ := $(patsubst %.cpp, %.o, $(SRC))

@@ -1,10 +1,11 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <cstdint>
 
-#include "../util/debug.hpp"
+#include "../util/types.hpp"
 
 class Renderer {
  private:
@@ -14,7 +15,10 @@ class Renderer {
   bool init(SDL_Window* window, uint32_t flags);
   void clean_up();
 
-  void set_render_color(SDL_Color color);
-
   static SDL_Renderer* get_renderer();
+
+  void set_render_color(SDL_Color color);
+  void render_text(text* text);
+
+  void draw_net();
 };

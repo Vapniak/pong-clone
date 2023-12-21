@@ -3,13 +3,18 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_ttf.h>
+
+#include <string>
 
 #include "util/colors.hpp"
 #include "util/debug.hpp"
 #include "util/globals.hpp"
+#include "util/types.hpp"
 
 bool Game::init() {
   SDL_Init(SDL_INIT_VIDEO);
+  TTF_Init();
 
   if (!m_window.init("Pong", globals::WINDOW_WIDTH, globals::WINDOW_HEIGHT,
                      SDL_WINDOW_SHOWN)) {
@@ -21,6 +26,15 @@ bool Game::init() {
   }
 
   m_running = true;
+
+  TTF_Font* font = TTF_OpenFont(globals::FONT_PATH, 16);
+  m_pScore_left = create_text(font, "0", 0, 0, colors::WHITE);
+  m_pScore_left->x = globals::RENDERER_WIDTH / 4 - m_pScore_left->w / 2;
+  m_pScore_left->y = globals::RENDERER_HEIGHT / 4 - m_pScore_left->h / 2;
+
+  m_pScore_right = create_text(font, "0", 0, 0, colors::WHITE);
+  m_pScore_right->x = 3 * globals::RENDERER_WIDTH / 4 - m_pScore_right->w / 2;
+  m_pScore_right->y = globals::RENDERER_HEIGHT / 4 - m_pScore_right->h / 2;
 
   return true;
 }
@@ -37,9 +51,13 @@ void Game::input() {
 void Game::clean_up() {
   m_renderer.clean_up();
   m_window.clean_up();
+
+  destroy_text(m_pScore_left);
+  destroy_text(m_pScore_right);
+
+  TTF_Quit();
   SDL_Quit();
 }
-
 void Game::update() {}
 
 void Game::render() {
@@ -49,13 +67,10 @@ void Game::render() {
   // render here
   m_renderer.set_render_color(colors::WHITE);
 
-  // draw net
-  for (uint32_t y = 0; y < globals::RENDERER_HEIGHT; y++) {
-    if (y % 5 != 0) {
-      SDL_RenderDrawPoint(m_renderer.get_renderer(),
-                          globals::RENDERER_WIDTH / 2, y);
-    }
-  }
+  m_renderer.draw_net();
+
+  m_renderer.render_text(m_pScore_left);
+  m_renderer.render_text(m_pScore_right);
 
   SDL_RenderPresent(m_renderer.get_renderer());
 }

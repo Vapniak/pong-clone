@@ -1,7 +1,9 @@
 #pragma once
 
+#include "SDL2/SDL_ttf.h"
 #include "gfx/renderer.hpp"
 #include "gfx/window.hpp"
+#include "util/types.hpp"
 
 class Game {
  private:
@@ -9,6 +11,9 @@ class Game {
 
   Renderer m_renderer;
   Window m_window;
+
+  text* m_pScore_left;
+  text* m_pScore_right;
 
  private:
   bool init();
