@@ -12,6 +12,10 @@ class Game {
   Renderer m_renderer;
   Window m_window;
 
+  TTF_Font* m_pScoreFont;
+  text m_score_left_text, m_score_right_text;
+  uint32_t m_score_left, m_score_right;
+
   bool init();
   void clean_up();
 

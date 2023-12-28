@@ -18,13 +18,36 @@ bool Game::init() {
   TTF_Init();
 
   if (!m_window.init("Pong", globals::WINDOW_WIDTH, globals::WINDOW_HEIGHT,
-                     SDL_WINDOW_SHOWN)) {
+                     0)) {
     return false;
   }
 
   if (!m_renderer.init(m_window.get_window(), SDL_RENDERER_PRESENTVSYNC)) {
     return false;
   }
+
+  m_pScoreFont = TTF_OpenFont(globals::FONT_PATH, 21);
+  if (m_pScoreFont == nullptr) {
+    debug::error("Could not open ", globals::FONT_PATH,
+                 " font. Error: ", TTF_GetError());
+    return false;
+  }
+
+  if (!m_score_left_text.init(m_pScoreFont, "0", vec2i::zero(),
+                              colors::WHITE)) {
+    return false;
+  }
+  m_score_left_text.pos =
+      vec2i(globals::RENDERER_WIDTH / 4, globals::RENDERER_HEIGHT / 4);
+
+  if (!m_score_right_text.init(m_pScoreFont, "0", vec2i::zero(),
+                               colors::WHITE)) {
+    return false;
+  }
+  m_score_right_text.pos =
+      vec2i(3 * globals::RENDERER_WIDTH / 4, globals::RENDERER_HEIGHT / 4);
+
+  m_score_left = m_score_right = 0;
 
   m_running = true;
 
@@ -39,11 +62,6 @@ void Game::input() {
         m_running = false;
         break;
     }
-    switch (event.key.keysym.sym) {
-      case SDLK_ESCAPE:
-        m_running = false;
-        break;
-    }
   }
 }
 
@@ -51,16 +69,23 @@ void Game::clean_up() {
   m_renderer.clean_up();
   m_window.clean_up();
 
+  m_score_left_text.clean_up();
+  m_score_right_text.clean_up();
+
+  TTF_CloseFont(m_pScoreFont);
+
   TTF_Quit();
   SDL_Quit();
 }
-void Game::update() {}
+void Game::update() {
+  m_score_left_text.set_str(std::to_string(m_score_left));
+  m_score_right_text.set_str(std::to_string(m_score_right));
+}
 
 void Game::render() {
   m_renderer.set_render_color(colors::BLACK);
   SDL_RenderClear(m_renderer.get_renderer());
 
-  // render here
   m_renderer.set_render_color(colors::WHITE);
 
   for (uint32_t y = 0; y < globals::RENDERER_HEIGHT; y++) {
@@ -69,6 +94,9 @@ void Game::render() {
                           globals::RENDERER_WIDTH / 2, y);
     }
   }
+
+  m_renderer.render_text_centered(m_score_left_text, 2);
+  m_renderer.render_text_centered(m_score_right_text, 2);
 
   SDL_RenderPresent(m_renderer.get_renderer());
 }

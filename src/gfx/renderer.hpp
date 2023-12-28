@@ -18,4 +18,7 @@ class Renderer {
   void clean_up();
 
   void set_render_color(SDL_Color color);
+
+  void render_text(text text, int32_t scale = 1);
+  void render_text_centered(text text, int32_t scale = 1);
 };
