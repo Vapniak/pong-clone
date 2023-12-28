@@ -1,6 +1,7 @@
 #include "game.hpp"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_ttf.h>
@@ -15,7 +16,7 @@
 bool Game::init() {
   SDL_Init(SDL_INIT_VIDEO);
   TTF_Init();
-//test
+
   if (!m_window.init("Pong", globals::WINDOW_WIDTH, globals::WINDOW_HEIGHT,
                      SDL_WINDOW_SHOWN)) {
     return false;
@@ -27,23 +28,21 @@ bool Game::init() {
 
   m_running = true;
 
-  TTF_Font* font = TTF_OpenFont(globals::FONT_PATH, 16);
-  m_pScore_left = create_text(font, "0", 0, 0, colors::WHITE);
-  m_pScore_left->x = globals::RENDERER_WIDTH / 4 - m_pScore_left->w / 2;
-  m_pScore_left->y = globals::RENDERER_HEIGHT / 4 - m_pScore_left->h / 2;
-
-  m_pScore_right = create_text(font, "0", 0, 0, colors::WHITE);
-  m_pScore_right->x = 3 * globals::RENDERER_WIDTH / 4 - m_pScore_right->w / 2;
-  m_pScore_right->y = globals::RENDERER_HEIGHT / 4 - m_pScore_right->h / 2;
-
   return true;
 }
 
 SDL_Event event;
 void Game::input() {
   while (SDL_PollEvent(&event)) {
-    if (event.type == SDL_QUIT) {
-      m_running = false;
+    switch (event.type) {
+      case SDL_QUIT:
+        m_running = false;
+        break;
+    }
+    switch (event.key.keysym.sym) {
+      case SDLK_ESCAPE:
+        m_running = false;
+        break;
     }
   }
 }
@@ -51,9 +50,6 @@ void Game::input() {
 void Game::clean_up() {
   m_renderer.clean_up();
   m_window.clean_up();
-
-  destroy_text(m_pScore_left);
-  destroy_text(m_pScore_right);
 
   TTF_Quit();
   SDL_Quit();
@@ -67,10 +63,12 @@ void Game::render() {
   // render here
   m_renderer.set_render_color(colors::WHITE);
 
-  m_renderer.draw_net();
-
-  m_renderer.render_text(m_pScore_left);
-  m_renderer.render_text(m_pScore_right);
+  for (uint32_t y = 0; y < globals::RENDERER_HEIGHT; y++) {
+    if (y % 5 != 0) {
+      SDL_RenderDrawPoint(m_renderer.get_renderer(),
+                          globals::RENDERER_WIDTH / 2, y);
+    }
+  }
 
   SDL_RenderPresent(m_renderer.get_renderer());
 }
