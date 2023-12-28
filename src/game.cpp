@@ -15,7 +15,7 @@
 bool Game::init() {
   SDL_Init(SDL_INIT_VIDEO);
   TTF_Init();
-
+//test
   if (!m_window.init("Pong", globals::WINDOW_WIDTH, globals::WINDOW_HEIGHT,
                      SDL_WINDOW_SHOWN)) {
     return false;
