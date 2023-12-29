@@ -22,7 +22,7 @@ bool Game::init() {
     return false;
   }
 
-  if (!m_renderer.init(m_window.get_window(), SDL_RENDERER_PRESENTVSYNC)) {
+  if (!m_renderer.init(Window::get_window(), SDL_RENDERER_PRESENTVSYNC)) {
     return false;
   }
 
@@ -37,13 +37,14 @@ bool Game::init() {
                               colors::WHITE)) {
     return false;
   }
-  m_score_left_text.pos =
-      vec2i(globals::RENDERER_WIDTH / 4, globals::RENDERER_HEIGHT / 4);
 
   if (!m_score_right_text.init(m_pScoreFont, "0", vec2i::zero(),
                                colors::WHITE)) {
     return false;
   }
+
+  m_score_left_text.pos =
+      vec2i(globals::RENDERER_WIDTH / 4, globals::RENDERER_HEIGHT / 4);
   m_score_right_text.pos =
       vec2i(3 * globals::RENDERER_WIDTH / 4, globals::RENDERER_HEIGHT / 4);
 
@@ -84,21 +85,21 @@ void Game::update() {
 
 void Game::render() {
   m_renderer.set_render_color(colors::BLACK);
-  SDL_RenderClear(m_renderer.get_renderer());
+  SDL_RenderClear(Renderer::get_renderer());
 
   m_renderer.set_render_color(colors::WHITE);
 
   for (uint32_t y = 0; y < globals::RENDERER_HEIGHT; y++) {
     if (y % 5 != 0) {
-      SDL_RenderDrawPoint(m_renderer.get_renderer(),
-                          globals::RENDERER_WIDTH / 2, y);
+      SDL_RenderDrawPoint(Renderer::get_renderer(), globals::RENDERER_WIDTH / 2,
+                          y);
     }
   }
 
-  m_renderer.render_text_centered(m_score_left_text, 2);
-  m_renderer.render_text_centered(m_score_right_text, 2);
+  m_score_left_text.render_centered();
+  m_score_right_text.render_centered();
 
-  SDL_RenderPresent(m_renderer.get_renderer());
+  SDL_RenderPresent(Renderer::get_renderer());
 }
 
 void Game::loop() {

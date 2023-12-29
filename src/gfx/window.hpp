@@ -9,7 +9,7 @@ class Window {
   static SDL_Window *m_pWindow;
 
  public:
-  static SDL_Window *get_window();
+  inline static SDL_Window *get_window() { return m_pWindow; }
 
   bool init(const char *title, uint32_t width, uint32_t height, uint32_t flags);
   void clean_up();

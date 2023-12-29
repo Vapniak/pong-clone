@@ -5,7 +5,6 @@
 #include "../util/debug.hpp"
 
 SDL_Window *Window::m_pWindow;
-SDL_Window *Window::get_window() { return m_pWindow; }
 
 bool Window::init(const char *title, uint32_t width, uint32_t height,
                   uint32_t flags) {
