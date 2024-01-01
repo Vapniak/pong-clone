@@ -1,7 +1,7 @@
 #include "entity.hpp"
 
 bool Entity::init() {
-  pos = vec2i::zero();
+  pos = vec2::zero();
   return true;
 }
 

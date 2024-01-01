@@ -28,7 +28,12 @@ struct vec2 {
   vec2() = default;
   vec2(float x, float y) : x(x), y(y) {}
 
-  vec2 operator*(float val) { return vec2(x * val, y * val); }
+  static vec2 zero() { return vec2(0, 0); }
 
-  operator vec2i() const { return vec2i((int32_t)x, (int32_t)y); }
+  vec2 operator*(float val) { return vec2(x * val, y * val); }
+  vec2& operator+=(vec2 val) {
+    x += val.x;
+    y += val.y;
+    return *this;
+  }
 };

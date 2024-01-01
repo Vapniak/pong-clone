@@ -2,7 +2,7 @@
 
 #include "../util/debug.hpp"
 
-bool text::init(TTF_Font* font, std::string str, vec2i pos, SDL_Color color) {
+bool text::init(TTF_Font* font, std::string str, vec2 pos, SDL_Color color) {
   if (font == nullptr) {
     debug::error("Font is null.");
     return false;
@@ -58,7 +58,7 @@ void text::set_str(std::string str) {
 }
 
 void text::render_centered() {
-  SDL_Rect rect = {pos.x, pos.y, m_size.x, m_size.y};
+  SDL_Rect rect = {(int32_t)pos.x, (int32_t)pos.y, m_size.x, m_size.y};
 
   rect.x -= rect.w / 2;
   rect.y -= rect.h / 2;

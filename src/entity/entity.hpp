@@ -8,7 +8,7 @@
 class Entity {
  private:
  public:
-  vec2i pos;
+  vec2 pos;
 
   virtual bool init();
   virtual void clean_up();

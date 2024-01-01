@@ -22,7 +22,7 @@ class text : public Entity {
   inline SDL_Color get_color() { return m_color; }
   inline SDL_Texture* get_texture() { return m_pTexture; }
 
-  bool init(TTF_Font* font, std::string str, vec2i pos, SDL_Color color);
+  bool init(TTF_Font* font, std::string str, vec2 pos, SDL_Color color);
   void clean_up() override;
 
   void render_centered();
